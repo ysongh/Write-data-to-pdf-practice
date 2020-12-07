@@ -12,8 +12,9 @@ app.use(cors());
 app.get('/', (req, res) => res.send('Server Work'));
 
 app.post('/fillform', async (req, res) => {
-    console.log(req.body);
-    const pdf = await rewritePdf();
+    const userData = req.body;
+    const pdf = await rewritePdf(userData);
+    
     res.setHeader("Content-Length", pdf.length);
     res.setHeader("Content-Type", "application/pdf");
     res.setHeader("Content-Disposition", "filename=test.pdf");

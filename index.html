@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <button id="getFile">Get file</button>
+</body>
+<script>
+    const getFileButton = document.getElementById('getFile');
+
+    getFileButton.addEventListener('click', () => {
+        const userData = {
+            name: 'Joe Doe',
+            age: '32'
+        };
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        fetch(`http://localhost:4000/fillform`, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(userData)
+        })
+            .then(async res => ({
+                filename: 'Docoument',
+                blob: await res.blob()
+            }))
+            .then(resObj => {
+                const newBlob = new Blob([resObj.blob], { type: 'application/pdf' });
+
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                    window.navigator.msSaveOrOpenBlob(newBlob);
+                } else {
+                    const objUrl = window.URL.createObjectURL(newBlob);
+
+                    let link = document.createElement('a');
+                    link.href = objUrl;
+                    link.download = resObj.filename;
+                    link.click();
+
+                    setTimeout(() => { window.URL.revokeObjectURL(objUrl); }, 250);
+                }
+            })
+            .catch((error) => {
+                console.error('Error', error);
+            });
+    });
+</script>
+</html>

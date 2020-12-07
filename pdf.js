@@ -1,8 +1,8 @@
-const { degrees, PDFDocument, StandardFonts, rgb } = require('pdf-lib');
+const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 const fs = require("fs");
 const path = require("path");
 
-async function rewritePdf(){
+async function rewritePdf(userData){
     const existingPdfBytes = fs.readFileSync(path.join(__dirname, "./pdf/TestTemplate.pdf"));
 
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
@@ -14,15 +14,21 @@ async function rewritePdf(){
 
     const { width, height } = firstPage.getSize();
 
-    firstPage.drawText('Testing', {
+    firstPage.drawText(userData.name, {
         x: 250,
         y: height / 2 + 200,
         size: 50,
         font: helveticaFont,
         color: rgb(0.95, 0.1, 0.1),
-        rotate: degrees(-45),
     })
 
+    firstPage.drawText(userData.age, {
+        x: 250,
+        y: height / 2 + 100,
+        size: 50,
+        font: helveticaFont,
+        color: rgb(0.95, 0.1, 0.1),
+    })
 
     const pdfBytes = await pdfDoc.save();
 
