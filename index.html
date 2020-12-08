@@ -6,15 +6,30 @@
     <title>Document</title>
 </head>
 <body>
-    <button id="getFile">Get file</button>
+    <form id="user-data-form">
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name">
+        </div>
+        <div>
+            <label for="location">Age</label>
+            <input type="number" id="age">
+        </div>
+        <input type="submit" value="Get file">
+    </form>
 </body>
 <script>
-    const getFileButton = document.getElementById('getFile');
+    const getUserDataForm = document.getElementById('user-data-form');
 
-    getFileButton.addEventListener('click', () => {
+    getUserDataForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const name = document.querySelector('#name').value;
+        const age = document.querySelector('#age').value;
+
         const userData = {
-            name: 'Joe Doe',
-            age: '32'
+            name,
+            age
         };
 
         let headers = new Headers();
